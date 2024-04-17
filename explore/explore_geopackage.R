@@ -37,9 +37,14 @@ hila_files <- here::here(glue::glue("data/Hila_P4413{LETTERS[1:8]}.gpkg"))
 
 hila_list <- purrr::map(hila_files, function(file) {st_read(file, layer = "gridcell")}, .progress = TRUE)
 
-hila <- bind_rows(hila_list)
+hila <- bind_rows(hila_list) %>%
+  select(-starts_with("sample"))
 
 hila_vuorisalo <- st_join(hila, kiinteistorajat, largest = TRUE, left = FALSE)
 
-plot(hila_vuorisalo["volume"])
-plot(hila_vuorisalo["meanheight"])
+attribute <- "subgroup"
+hila_vuorisalo.rep <- hila_vuorisalo %>%
+  left_join(filter(meta_codes, attribute == !!attribute), by = c("subgroup" = "code"))
+
+# explore
+plot(hila_vuorisalo["subgroup"])
