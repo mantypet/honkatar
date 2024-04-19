@@ -8,7 +8,7 @@ library(viridis)
 # Kiinteistörajat
 # https://asiointi.maanmittauslaitos.fi/karttapaikka/tiedostopalvelu/kiinteistorekisterikartta_vektori
 
-file <- here::here("data/kiinteistorekisterikartta.gpkg")
+file <- here::here("data/2024-04-16-kiinteistorajat-vuorisalo.gpkg")
 st_layers(file)
 
 query <- "SELECT * from PalstanSijaintitiedot WHERE kiinteistotunnuksenEsitysmuoto = '931-408-8-26'"
@@ -18,7 +18,7 @@ kiinteistorajat <- st_read(file,
                            query = query)
 # Maastotietokanta
 
-file <- here::here("data/maastotietokanta_kaikki.gpkg")
+file <- here::here("data/2024-04-19-maastotietokanta_kaikki.gpkg")
 st_layers(file)
 
 tieviiva <- st_read(file,
@@ -53,11 +53,11 @@ hila <- bind_rows(hila_list, .id = "file") %>%
   mutate(across(c(maingroup, subgroup, fertilityclass, soiltype, drainagestate, harvestaccessibility, growthplacedatasource, developmentclass, maintreespecies), as.character))
 
 hila_vuorisalo <- st_join(hila, kiinteistorajat, largest = TRUE, left = FALSE)
-hila_vuorisalo <- st_join(hila, kiinteistorajat, largest = TRUE, left = FALSE)
+tieviiva_vuorisalo <- st_join(hila, tieviiva, largest = TRUE, left = FALSE)
 
 # explore
 
-thl_test_palette <- c("#31AA35", "#005A1E", "#0B57CE", "#CA369C", "#0096FA", "#FFA03C", "#ED8CAE")
+test_palette <- c("#31AA35", "#005A1E", "#0B57CE", "#CA369C", "#0096FA", "#FFA03C", "#ED8CAE")
 
 # maingroup
 hila_vuorisalo.rep <- hila_vuorisalo %>%
@@ -121,7 +121,7 @@ hila_vuorisalo.rep <- hila_vuorisalo
 
 ggplot(hila_vuorisalo.rep) +
   geom_sf(aes(fill = ditchingyear), color = NA) +
-  scale_fill_manual(values = thl_test_palette)
+  scale_fill_manual(values = test_palette)
 
 # harvestaccessibility
 
