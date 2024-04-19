@@ -3,7 +3,6 @@ library(sf)
 library(purrr)
 library(readxl)
 library(ggplot2)
-library(thlGraphs)
 library(viridis)
 
 # Kiinteistörajat
